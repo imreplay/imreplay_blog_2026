@@ -1,0 +1,29 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getPosts, withBase } from '../../lib/posts';
+const posts = await getPosts();
+const categories = [...new Set(posts.map(post => post.data.category))].sort();
+---
+<Base title="Posts" active="posts" description="imreplay의 보안 연구와 기술 기록.">
+  <section class="page-heading">
+    <div class="eyebrow"><span class="status-dot"></span> RESEARCH & DEVELOPMENT</div>
+    <h1>기술 기록<span class="heading-dot">.</span></h1>
+    <p>보안 연구와 개발에 관한 글을 정리합니다.</p>
+  </section>
+  <div class="content-grid">
+    <section id="posts" class="posts-section" aria-labelledby="posts-title">
+      <div class="section-heading"><h2 id="posts-title">전체 글<span class="heading-dot">.</span></h2><span class="all-link">{posts.length}개의 글</span></div>
+      {posts.length > 0 ? <>
+        <div class="post-filters"><div class="filter-buttons" role="group" aria-label="카테고리 필터"><button data-filter="All" aria-pressed="true">전체 <span>{posts.length}</span></button>{categories.map(category => <button data-filter={category} aria-pressed="false">{category}<span>{posts.filter(post => post.data.category === category).length}</span></button>)}</div><span id="filter-status" role="status" aria-live="polite">{posts.length}개의 기록</span></div>
+        <div class="post-list">{posts.map(post => <PostCard post={post}/>)}</div>
+      </> : <div class="posts-empty"><span class="posts-empty-icon"><Icon name="book" size={26}/></span><h3>아직 작성된 글이 없습니다.</h3><p>새로운 기술 기록을 준비하고 있습니다.</p></div>}
+    </section>
+    <aside class="sidebar" aria-label="작성자 및 카테고리">
+      <section class="profile-card"><div class="profile-monogram" aria-hidden="true">ir<span>_</span><i></i></div><h2>imreplay<span>.</span></h2><p class="profile-name">임재연 <span>/ Security Researcher</span></p><p class="profile-bio">보안 연구와 CTF 활동을 기록합니다.</p><div class="profile-location"><Icon name="pin" size={14}/> South Korea</div><div class="profile-social"><a href="https://github.com/imreplay" target="_blank" rel="noopener noreferrer" aria-label="GitHub (새 탭)"><Icon name="github" size={18}/></a><a href="mailto:imreplay@imreplay.com" aria-label="이메일 보내기"><Icon name="mail" size={18}/></a><a href={withBase('rss.xml')} aria-label="RSS 피드"><Icon name="rss" size={18}/></a><a class="profile-more" href={withBase()}>더 알아보기 <Icon name="right" size={14}/></a></div></section>
+      {categories.length > 0 && <section class="sidebar-section"><h2><Icon name="folder" size={15}/> Categories</h2><div class="sidebar-categories">{categories.map(category => <a href={`${withBase('posts/')}?category=${encodeURIComponent(category)}#posts`}><span><span class="category-dot"></span>{category}</span><span class="category-count">{posts.filter(post => post.data.category === category).length}</span></a>)}</div></section>}
+      <a class="portfolio-callout" href={withBase()}><div><span class="eyebrow">ABOUT THE RESEARCHER</span><Icon name="right" size={17}/></div><h3>임재연 · imreplay</h3><p>소개, 연구 이력과 CTF 활동.</p><span class="portfolio-url">프로필 보기 <span>→</span></span></a>
+    </aside>
+  </div>
+</Base>

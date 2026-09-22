@@ -1,0 +1,39 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from './Icon.astro';
+import ResearchVisual from './ResearchVisual.astro';
+import { withBase } from '../lib/posts';
+const experience = [
+  { period: '2021.02 —', title: '라온시큐어', subtitle: 'CoreRND팀 (구. 핵심연구팀) · 연구원', current: true },
+  { period: '2021.02 —', title: 'SaturnX', subtitle: '해킹 & 보안팀', current: true },
+  { period: '2017.01 — 2018.12', title: '대한민국 공군', subtitle: '사이버방호센터 772기', current: false },
+];
+const competitions = [
+  { year: '2026', title: 'DEF CON 34 CTF Finals', team: 'Cold Fusion', rank: '4th' },
+  { year: '2025', title: 'BlackhatMEA CTF Finals', team: 'SnackturnX (SaturnX)', rank: '13th' },
+  { year: '2025', title: 'DEF CON 33 CTF Finals', team: 'Cold Fusion', rank: '10th' },
+  { year: '2024', title: 'CCE · 공공부문', team: 'To_the_moon · 예선 2위', rank: '7th' },
+  { year: '2024', title: 'WxMCTF', team: 'Raong2', rank: '3rd' },
+  { year: '2022', title: 'DefCamp CTF Finals', team: 'SaturnX', rank: 'Finalist' },
+];
+---
+<Base active="about" canonicalPath={withBase()}>
+  <section class="page-heading about-heading">
+    <div class="profile-intro">
+      <div class="eyebrow"><span class="status-dot"></span> SECURITY RESEARCHER</div>
+      <h1>임재연<span class="heading-dot">.</span><br/><span>imreplay</span></h1>
+      <p>연구 이력과 CTF 활동, 기술 기록을 정리합니다.</p>
+      <div class="about-social">
+        <a class="primary-button" href={withBase('posts/')}>글 보러 가기 <Icon name="right" size={17}/></a>
+        <a class="text-button" href="https://github.com/imreplay" target="_blank" rel="noopener noreferrer">GitHub <Icon name="arrow" size={16}/></a>
+        <a class="text-button" href="mailto:imreplay@imreplay.com">연락하기 <Icon name="mail" size={16}/></a>
+      </div>
+    </div>
+    <ResearchVisual />
+  </section>
+  <div class="about-grid"><div class="about-main">
+    <section class="about-section"><div class="about-section-heading"><span>01 /</span><h2>Experience</h2></div><div class="timeline">{experience.map(item => <div class="timeline-item"><span class:list={['timeline-dot', { current: item.current }]}></span><div class="timeline-period">{item.period}</div><h3>{item.title}</h3><p>{item.subtitle}</p></div>)}</div></section>
+    <section class="about-section"><div class="about-section-heading"><span>02 /</span><h2>CTF & Competitions</h2></div><div class="competition-list">{competitions.map(item => <div class="competition"><span class="competition-year">{item.year}</span><div><h3>{item.title}</h3><p>{item.team}</p></div><span class="rank">{item.rank}</span></div>)}</div><div class="ctftime-links"><a href="https://ctftime.org/team/144333" target="_blank" rel="noopener noreferrer">SaturnX on CTFtime <Icon name="arrow" size={14}/></a><a href="https://ctftime.org/team/278903" target="_blank" rel="noopener noreferrer">Raong2 on CTFtime <Icon name="arrow" size={14}/></a></div></section>
+    <section class="about-section"><div class="about-section-heading"><span>03 /</span><h2>Education & Activities</h2></div><div class="education-item"><h3>국립목포대학교 정보보호학과</h3><p>2015.03 — 2021.08</p></div><div class="education-item"><h3>Best of the Best · 9기</h3><p>취약점 분석 트랙 · 2020.07 — 2021.03</p></div><div class="education-item"><h3>KUCIS & SecuMaster</h3><p>대학정보보호동아리연합회 운영진 및 교내 정보보안동아리 활동 · 2016</p></div></section>
+  </div><aside class="about-aside"><section class="research-card"><Icon name="terminal" size={25}/><h2>Research identifiers</h2><p>공개된 연구 식별자</p><ul><li>CVE-2020-28880</li><li>CVE-2023-45800<span>KVE-2023-0105</span></li><li>KVE-2024-0455</li></ul></section><section class="awards-card"><span class="eyebrow">RECOGNITION</span><h2>Awards</h2><div><h3>정보보호페스티벌 해킹대회 대상</h3><p>국립목포대학교 · 2015, 2016</p></div><div><h3>추계학술대회 우수논문상</h3><p>스마트미디어학회 · 2019</p></div></section></aside></div>
+</Base>

@@ -1,0 +1,91 @@
+<div class="research-visual" aria-hidden="true">
+  <div class="research-parallax">
+  <svg class="research-float" viewBox="0 0 360 290" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="research-halo">
+        <stop stop-color="var(--accent)" stop-opacity=".09" />
+        <stop offset="1" stop-color="var(--accent)" stop-opacity="0" />
+      </radialGradient>
+      <linearGradient id="research-orbit" x1="55" y1="228" x2="311" y2="62" gradientUnits="userSpaceOnUse">
+        <stop stop-color="var(--accent)" stop-opacity=".18" />
+        <stop offset=".48" stop-color="var(--accent)" />
+        <stop offset="1" stop-color="var(--accent)" stop-opacity=".3" />
+      </linearGradient>
+    </defs>
+
+    <circle class="research-glow" cx="180" cy="141" r="138" fill="url(#research-halo)" />
+    <g stroke="var(--accent)" stroke-opacity=".13">
+      <circle class="research-guides" cx="180" cy="141" r="115" stroke-dasharray="2 8" />
+      <path d="M180 14v12m0 230v12M53 141H41m278 0h-12" />
+    </g>
+
+    <g transform="rotate(-24 180 141)" stroke="var(--accent)" stroke-width=".85">
+      <circle cx="180" cy="141" r="80" fill="var(--bg)" fill-opacity=".65" stroke-opacity=".6" />
+      <ellipse cx="180" cy="141" rx="25" ry="80" stroke-opacity=".27" />
+      <ellipse cx="180" cy="141" rx="54" ry="80" stroke-opacity=".33" />
+      <path d="M180 61v160" stroke-opacity=".2" />
+      <ellipse cx="180" cy="141" rx="80" ry="23" stroke-opacity=".32" />
+      <ellipse cx="180" cy="141" rx="80" ry="51" stroke-opacity=".25" />
+      <path d="M100 141h160" stroke-opacity=".22" />
+      <ellipse cx="180" cy="141" rx="151" ry="36" stroke="url(#research-orbit)" stroke-width="1.3" />
+      <path d="M29 141c0 20 68 36 151 36s151-16 151-36" stroke="var(--accent)" stroke-width="1.6" stroke-opacity=".85" />
+      <ellipse class="orbit-trace" cx="180" cy="141" rx="151" ry="36" pathLength="1000" stroke="var(--accent)" stroke-width="2.8" stroke-linecap="round" stroke-dasharray="22 978" />
+      <circle cx="324" cy="153" r="4" fill="var(--accent)" stroke="var(--bg)" stroke-width="2" />
+    </g>
+
+    <circle cx="220" cy="80" r="3" fill="var(--accent)" />
+    <circle cx="220" cy="80" r="8" stroke="var(--accent)" stroke-opacity=".22" />
+    <path d="m286 45 4-4m-4 0 4 4M72 239v8m-4-4h8" stroke="var(--accent)" stroke-opacity=".5" />
+    <circle cx="58" cy="90" r="1.5" fill="var(--muted)" fill-opacity=".55" />
+    <circle cx="304" cy="230" r="1.5" fill="var(--muted)" fill-opacity=".55" />
+  </svg>
+  </div>
+</div>
+
+<style>
+  .research-visual {
+    position: relative;
+    width: min(100%, 400px);
+    justify-self: end;
+    align-self: center;
+    pointer-events: none;
+  }
+  .research-parallax {
+    transform: perspective(700px) rotateX(var(--orbit-tilt-x, 0deg)) rotateY(var(--orbit-tilt-y, 0deg));
+    transition: transform .6s cubic-bezier(.22, 1, .36, 1);
+  }
+  svg { display: block; width: 100%; height: auto; }
+  :global(html[data-motion="on"]) .research-float {
+    animation: float-orbit 8s ease-in-out infinite;
+  }
+  :global(html[data-motion="on"]) .research-guides {
+    transform-origin: 180px 141px;
+    animation: turn-guides 80s linear infinite;
+  }
+  :global(html[data-motion="on"]) .orbit-trace {
+    animation: follow-orbit 16s linear infinite;
+  }
+  :global(html[data-motion="on"]) .research-glow {
+    animation: glow-orbit 6s ease-in-out infinite alternate;
+  }
+  :global(html[data-page-visible="false"]) svg,
+  :global(html[data-page-visible="false"]) svg * {
+    animation-play-state: paused !important;
+  }
+  @keyframes float-orbit { 50% { transform: translateY(-8px); } }
+  @keyframes turn-guides { to { transform: rotate(360deg); } }
+  @keyframes follow-orbit { to { stroke-dashoffset: -1000; } }
+  @keyframes glow-orbit { to { opacity: .45; } }
+  @media (prefers-reduced-motion: reduce) {
+    .research-parallax { transform: none; transition: none; }
+    svg, svg * { animation: none !important; }
+  }
+  @media (max-width: 600px) {
+    .research-visual {
+      grid-column: 2;
+      grid-row: 1 / 3;
+      width: 100%;
+      align-self: center;
+    }
+  }
+</style>

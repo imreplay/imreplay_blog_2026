@@ -1,0 +1,5 @@
+---
+import Base from '../layouts/Base.astro';
+import { withBase } from '../lib/posts';
+---
+<Base title="페이지를 찾을 수 없습니다"><section class="not-found"><span class="eyebrow">LOST IN THE SOURCE?</span><div>404<span>_</span></div><h1>아직 기록되지 않은 페이지입니다.</h1><p>주소가 바뀌었거나 존재하지 않는 페이지예요.</p><a class="primary-button" href={withBase()}>홈으로 돌아가기 →</a></section></Base>

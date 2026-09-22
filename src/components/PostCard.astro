@@ -1,0 +1,21 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { formatDate, postUrl, readingTime } from '../lib/posts';
+import Icon from './Icon.astro';
+interface Props { post: CollectionEntry<'posts'> }
+const { post } = Astro.props;
+const external = !!post.data.externalUrl;
+const age = Date.now() - post.data.date.valueOf();
+const isNew = !external && age >= 0 && age < 30 * 24 * 60 * 60 * 1000;
+---
+<article class="post-card" data-category={post.data.category} data-tags={post.data.tags.join(' ')}>
+  <div class="post-copy">
+    <div class="post-eyebrow"><span class:list={['category-label', { wargame: external }]}>{post.data.category}</span><span class="meta-separator">/</span><time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>{isNew && <span class="new-label">NEW</span>}</div>
+    <h3><a class="post-title" href={postUrl(post)} target={external ? '_blank' : undefined} rel={external ? 'noopener noreferrer' : undefined}>{post.data.title}<Icon name={external ? 'arrow' : 'right'} size={18}/>{external && <span class="sr-only"> (기존 블로그, 새 탭)</span>}</a></h3>
+    <p class="post-description">{post.data.description}</p>
+    <div class="post-bottom"><div class="post-tags">{post.data.tags.map(tag => <span>#{tag}</span>)}</div><span class="reading-time">{external ? '이전 블로그 ↗' : `${readingTime(post.body)} min read`}</span></div>
+  </div>
+  <a class:list={['post-cover', `cover-${post.data.cover}`]} href={postUrl(post)} target={external ? '_blank' : undefined} rel={external ? 'noopener noreferrer' : undefined} tabindex="-1" aria-hidden="true">
+    {external ? <><span class="cover-caption">WEBHACKING.KR</span><span class="cover-number">{post.data.cover}<span>_</span></span><span class="cover-foot">WARGAME / OLD</span><span class="cover-corner">↗</span></> : <><span class="cover-caption">A NEW CHAPTER</span><span class="hello-code">hello,<br/><em>world<span>_</span></em></span><span class="cover-foot">imreplay.log</span></>}
+  </a>
+</article>

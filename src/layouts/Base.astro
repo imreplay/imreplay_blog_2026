@@ -1,0 +1,50 @@
+---
+import '../styles/global.css';
+import '../styles/enhancements.css';
+import '@fontsource-variable/dm-sans';
+import '@fontsource-variable/noto-sans-kr';
+import '@fontsource/jetbrains-mono/400.css';
+import Icon from '../components/Icon.astro';
+import { getPosts, withBase, postUrl } from '../lib/posts';
+interface Props { title?: string; description?: string; active?: string; article?: boolean; canonicalPath?: string }
+const { title, description = '보안 연구자 임재연(imreplay)의 개인 홈페이지. 연구 이력, CTF 활동과 기술 기록.', active = 'about', article = false, canonicalPath } = Astro.props;
+const posts = await getPosts();
+const canonical = new URL(canonicalPath ?? Astro.url.pathname, Astro.site);
+const pageTitle = title ? `${title} — imreplay` : '임재연 · imreplay — Security Researcher';
+---
+<!doctype html>
+<html lang="ko" data-theme="dark">
+  <head>
+    <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="generator" content={Astro.generator}/><meta name="description" content={description}/>
+    <meta name="theme-color" content="#101313"/><title>{pageTitle}</title>
+    <link rel="canonical" href={canonical}/><link rel="icon" type="image/svg+xml" href={withBase('favicon.svg')}/>
+    <link rel="alternate" type="application/rss+xml" title="imreplay RSS" href={withBase('rss.xml')}/>
+    <meta property="og:title" content={pageTitle}/><meta property="og:description" content={description}/><meta property="og:type" content={article ? 'article' : 'website'}/><meta property="og:url" content={canonical}/><meta property="og:locale" content="ko_KR"/>
+    <script is:inline>try { const theme = localStorage.getItem('imreplay-theme'); if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme; } catch {}</script>
+    <script is:inline>
+      let paused = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      try { paused ||= localStorage.getItem('imreplay-motion') === 'off'; } catch {}
+      document.documentElement.dataset.motion = paused ? 'off' : 'on';
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">본문으로 건너뛰기</a>
+    <div class="site-scroll-progress" aria-hidden="true"></div>
+    <header class="site-header"><div class="header-inner">
+      <a class="wordmark" href={withBase()} aria-label="imreplay 홈"><span class="logo-mark"><Icon name="terminal" size={20}/></span>imreplay<span class="brand-dot">.</span><span class="blog-label">{active === 'about' ? '/ portfolio' : '/ blog'}</span></a>
+      <nav class="main-nav" aria-label="메인 메뉴"><a href={withBase()} aria-current={active === 'about' ? 'page' : undefined}>About</a><a href={withBase('posts/')} aria-current={active === 'posts' ? 'page' : undefined}>Posts</a></nav>
+      <div class="header-actions"><button class="search-trigger" aria-label="글 검색" data-search-open><Icon name="search" size={18}/><kbd>⌘ K</kbd></button><span class="header-divider"></span><button class="icon-button theme-toggle" aria-label="라이트 모드로 전환" title="테마 전환"><Icon name="sun" class="sun-icon" size={19}/><Icon name="moon" class="moon-icon" size={19}/></button><a class="icon-button header-github" href="https://github.com/imreplay" target="_blank" rel="noopener noreferrer" aria-label="GitHub (새 탭)"><Icon name="github" size={19}/></a></div>
+    </div></header>
+    <main id="main" class="site-main"><slot/></main>
+    <footer class="site-footer"><div class="footer-inner"><div><a class="footer-brand" href={withBase()}>imreplay<span>.</span></a><span class="copyright">© {new Date().getFullYear()} imreplay.</span></div><div class="footer-links"><a href="https://github.com/imreplay" target="_blank" rel="noopener noreferrer">GitHub <Icon name="arrow" size={13}/></a><a href="mailto:imreplay@imreplay.com">Email <Icon name="arrow" size={13}/></a><a href={withBase('rss.xml')}>RSS <Icon name="rss" size={13}/></a><button class="motion-toggle" type="button" aria-label="시각적 움직임 줄이기" aria-pressed="false"><span class="motion-symbol" aria-hidden="true"></span><span data-motion-label>움직임 끄기</span></button><button class="back-top" aria-label="맨 위로 이동">↑</button></div></div></footer>
+    <dialog id="search-dialog" aria-labelledby="search-title">
+      <div class="search-dialog-top"><Icon name="search"/><h2 id="search-title" class="sr-only">블로그 글 검색</h2><input id="search-input" type="search" placeholder="제목, 내용, 태그로 검색…" autocomplete="off" aria-label="검색어"/><button class="icon-button" data-search-close aria-label="검색 닫기"><Icon name="close"/></button></div>
+      <div class="search-hint">작은 발견부터 오래된 기록까지.</div>
+      <ul class="search-results">{posts.map(post => <li data-search-text={`${post.data.title} ${post.data.description} ${post.data.category} ${post.data.tags.join(' ')} ${post.data.externalUrl ? '' : post.body}`.toLowerCase()}><a href={postUrl(post)} target={post.data.externalUrl ? '_blank' : undefined} rel={post.data.externalUrl ? 'noopener noreferrer' : undefined}><span class="search-category">{post.data.category}</span><strong>{post.data.title}</strong><Icon name={post.data.externalUrl ? 'arrow' : 'right'} size={18}/>{post.data.externalUrl && <span class="sr-only">기존 블로그, 새 탭</span>}</a></li>)}</ul>
+      <p class="search-empty" hidden={posts.length > 0}>{posts.length > 0 ? '검색 결과가 없습니다. 다른 검색어로 찾아보세요.' : '아직 작성된 글이 없습니다.'}</p><div class="search-footer"><span id="search-status" role="status" aria-live="polite">{posts.length}개의 글</span><span><kbd>esc</kbd> 닫기</span></div>
+    </dialog>
+    <script src="../scripts/site.ts"></script>
+    <script src="../scripts/motion.ts"></script>
+  </body>
+</html>
